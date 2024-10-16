@@ -39,6 +39,7 @@ weatherdf = weatherdf.drop(columns=["wpgt", "tsun", "tmax", "tmin"])
 weatherdf = weatherdf[weatherdf.index.isin(df.index)]
 df = pd.merge(df, weatherdf, left_index=True, right_index=True)
 
+
 # Check if there are any missing dates
 full_date_range = pd.date_range(start=df.index.min(), end=df.index.max(), freq="D")
 df = df.reindex(full_date_range)
@@ -70,4 +71,4 @@ df = create_seasonal_features(df)
 # print(missing_percentages(df))
 # print(df)
 
-df.to_csv("./Data/Datasets/Processed/preprocessed_data_all.csv", index=False)
+# df.to_csv("./Data/Datasets/Processed/preprocessed_data_all.csv", index=False)

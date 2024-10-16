@@ -35,6 +35,7 @@ def smooth_outliers(df, threshold=3, window_size=30):
 
 
 def create_datetime_features(df):
+    df.index = pd.to_datetime(df.index)
     df["year"] = df.index.year
     df["month"] = df.index.month
     df["day"] = df.index.day
