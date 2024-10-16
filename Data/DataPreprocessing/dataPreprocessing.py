@@ -54,19 +54,20 @@ df = smooth_outliers(df)
 
 # plot_correlation_matrix(df)
 
+df = scale_data(df)
 df = create_datetime_features(df)
 df = create_seasonal_features(df)
-df = scale_data(df)
 
-boxplot_monthly_variation_o3(df)
-boxplot_weekly_variation_o3(df)
 
-boxplot_monthly_variation_no2(df)
-boxplot_weekly_variation_no2(df)
+# boxplot_monthly_variation_o3(df)
+# boxplot_weekly_variation_o3(df)
 
-boxplot_yearly_variation(df)
+# boxplot_monthly_variation_no2(df)
+# boxplot_weekly_variation_no2(df)
+
+# boxplot_yearly_variation(df)
 
 # print(missing_percentages(df))
 # print(df)
 
-# df.to_csv("./Data/Datasets/Processed/preprocessed_data_all.csv", index=False)
+df.to_csv("./Data/Datasets/Processed/preprocessed_data_all.csv", index=False)
