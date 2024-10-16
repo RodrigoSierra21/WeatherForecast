@@ -1,4 +1,6 @@
 import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 
 from sklearn.model_selection import GridSearchCV, KFold
 from sklearn.ensemble import RandomForestRegressor
@@ -10,35 +12,25 @@ from abstractClass import Model
 
 class RandomForest(Model):
 
-    def create_lags(self, df, target_column):
+    def create_lags(sef, df, target_column):
+        data = df.values
+        n_steps = 5
+        n_forecast = 3
+        X, Y = [], []
 
-        # Create lag features and targets
-        for lag in [1, 2, 3]:
-            # Create lagged features for 'o3'
-            df[f"{target_column}_lag_{lag}"] = df[target_column].shift(lag)
+        for i in range(len(data) - n_steps - n_forecast + 1):
+            X.append(data[i : i + n_steps].flatten())
+            Y.append(
+                data[
+                    i + n_steps : i + n_steps + n_forecast,
+                    df.columns.get_loc(target_column),
+                ]
+            )
 
-            if lag <= 3:
-                # Create target columns (future values of 'o3')
-                df[f"{target_column}_target_{lag}"] = df[target_column].shift(-lag)
+        X = np.array(X)
+        Y = np.array(Y)
 
-        df = df.dropna()
-
-        X = df.drop(
-            columns=[
-                f"{target_column}_target_{1}",
-                f"{target_column}_target_{2}",
-                f"{target_column}_target_{3}",
-            ]
-        )
-        y = df[
-            [
-                f"{target_column}_target_{1}",
-                f"{target_column}_target_{2}",
-                f"{target_column}_target_{3}",
-            ]
-        ]
-
-        return X, y
+        return X, Y
 
     def create_grid_params(self):
         grid_params = {
@@ -65,8 +57,8 @@ class RandomForest(Model):
         return model
 
     def fit_model(self, X_train, y_train, X_val, y_val):
-        X_train = pd.concat([X_train, X_val], axis=0)
-        y_train = pd.concat([y_train, y_val], axis=0)
+        X_train = np.concatenate([X_train, X_val], axis=0)
+        y_train = np.concatenate([y_train, y_val], axis=0)
 
         hyperparameters = self.create_grid_params()
         model = self.create_model()
@@ -100,6 +92,6 @@ class RandomForest(Model):
         return model
 
 
-df = pd.read_csv("./Data/Datasets/Processed/preprocessed_data.csv")
-model = RandomForest()
-mod = model.train_model(df, 'ozone')
+df = pd.read_csv("./Data/Datasets/Processed/NO2_features.csv")
+rf = RandomForest()
+model = rf.train_model(df, "NO2")

@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from sklearn.multioutput import MultiOutputRegressor
 from sklearn.model_selection import GridSearchCV, KFold
 
@@ -9,39 +10,32 @@ from abstractClass import Model
 
 class XGBoost(Model):
 
-    def create_lags(self, df, target_column):
+    def create_lags(sef, df, target_column):
+        data = df.values
+        n_steps = 5
+        n_forecast = 3
+        X, Y = [], []
 
-        # Create lag features and targets
-        for lag in [1, 2, 3]:
-            # Create lagged features for 'o3'
-            df[f"{target_column}_lag_{lag}"] = df[target_column].shift(lag)
+        for i in range(len(data) - n_steps - n_forecast + 1):
+            X.append(data[i : i + n_steps].flatten())
+            Y.append(
+                data[
+                    i + n_steps : i + n_steps + n_forecast,
+                    df.columns.get_loc(target_column),
+                ]
+            )
 
-            if lag <= 3:
-                # Create target columns (future values of 'o3')
-                df[f"{target_column}_target_{lag}"] = df[target_column].shift(-lag)
+        X = np.array(X)
+        Y = np.array(Y)
 
-        df = df.dropna()
-
-        X = df.drop(
-            columns=[
-                f"{target_column}_target_{1}",
-                f"{target_column}_target_{2}",
-                f"{target_column}_target_{3}",
-            ]
-        )
-        y = df[
-            [
-                f"{target_column}_target_{1}",
-                f"{target_column}_target_{2}",
-                f"{target_column}_target_{3}",
-            ]
-        ]
-
-        return X, y
+        print(X.shape, Y.shape)
+        print(X[0])
+        print(Y[0])
+        return X, Y
 
     def create_grid_params(self):
         grid_params = {
-            "estimator__n_estimators": [100, 500, 1000],
+            "estimator__n_estimators": [100, 500],
             "estimator__learning_rate": [0.01, 0.05, 0.1],
             "estimator__max_depth": [3, 6, 9],
         }
@@ -61,8 +55,8 @@ class XGBoost(Model):
         return multi_output_model
 
     def fit_model(self, X_train, y_train, X_val, y_val):
-        X_train = pd.concat([X_train, X_val], axis=0)
-        y_train = pd.concat([y_train, y_val], axis=0)
+        X_train = np.concatenate([X_train, X_val], axis=0)
+        y_train = np.concatenate([y_train, y_val], axis=0)
         hyperparametrs = self.create_grid_params()
         model = self.create_model()
 
@@ -95,6 +89,6 @@ class XGBoost(Model):
         return model
 
 
-df = pd.read_csv("./Data/Datasets/Processed/preprocessed_data.csv")
-model = XGBoost()
-mod = model.train_model(df, 'ozone')
+df = pd.read_csv("./Data/Datasets/Processed/NO2_features.csv")
+xg = XGBoost()
+model = xg.train_model(df, "O3")

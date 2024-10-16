@@ -78,7 +78,6 @@ class BaselineLinearRegression(Model):
         return best_model
 
     def train_model(self, df, target_column):
-        print("calling")
         X, y = self.create_lags(df, target_column)
         X_train, X_val, X_test = self.create_splits(X, 0.7, 0.85)
         y_train, y_val, y_test = self.create_splits(y, 0.7, 0.85)
@@ -89,6 +88,6 @@ class BaselineLinearRegression(Model):
         return model
 
 
-df = pd.read_csv("./Data/Datasets/Processed/preprocessed_data.csv")
-model = BaselineLinearRegression()
-mod = model.train_model(df, 'ozone')
+df = pd.read_csv("./Data/Datasets/Processed/O3_features.csv")
+lreg = BaselineLinearRegression()
+model = lreg.train_model(df, "O3")
