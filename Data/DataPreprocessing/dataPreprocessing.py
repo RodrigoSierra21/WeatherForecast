@@ -44,6 +44,7 @@ df = pd.merge(df, weatherdf, left_index=True, right_index=True)
 full_date_range = pd.date_range(start=df.index.min(), end=df.index.max(), freq="D")
 df = df.reindex(full_date_range)
 
+
 # Replace any empy value with nan
 df.replace(r"^\s*$", np.nan, regex=True, inplace=True)
 
@@ -51,13 +52,17 @@ df.replace(r"^\s*$", np.nan, regex=True, inplace=True)
 df = df.apply(pd.to_numeric, errors="coerce")
 df = df.interpolate(method="linear").interpolate(method="nearest")
 
+
 df = smooth_outliers(df)
+
 
 # plot_correlation_matrix(df)
 
 df = scale_data(df)
+
+
 df = create_datetime_features(df)
-df = create_seasonal_features(df)
+# df = create_seasonal_features(df)
 
 
 # boxplot_monthly_variation_o3(df)

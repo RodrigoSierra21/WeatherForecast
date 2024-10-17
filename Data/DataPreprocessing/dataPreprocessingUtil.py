@@ -35,14 +35,12 @@ def smooth_outliers(df, threshold=3, window_size=30):
 
 
 def create_datetime_features(df):
-    df.index = pd.to_datetime(df.index)
+    # Create features based on the index
     df["year"] = df.index.year
     df["month"] = df.index.month
     df["day"] = df.index.day
     df["day_of_week"] = df.index.dayofweek
     df["week_of_year"] = df.index.isocalendar().week
-
-    return df
 
 
 def create_seasonal_features(df):
@@ -57,5 +55,5 @@ def create_seasonal_features(df):
 def scale_data(df):
     scaler = MinMaxScaler()
     scaled_data = scaler.fit_transform(df)
-    scaled_df = pd.DataFrame(scaled_data, columns=df.columns)
+    scaled_df = pd.DataFrame(scaled_data, columns=df.columns, index=df.index)
     return scaled_df
