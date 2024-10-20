@@ -1,0 +1,14 @@
+{
+    "best_params": {
+        "estimator__max_depth": "30",
+        "estimator__max_features": "sqrt",
+        "estimator__min_samples_leaf": "4",
+        "estimator__min_samples_split": "10",
+        "estimator__n_estimators": "300"
+    },
+    "best_score": -0.018500430893369522,
+    "rmse": 0.08023251048216253,
+    "r2": 0.7971025425795192,
+    "mae": 0.06230691227440798,
+    "training_time": 199.4940586090088
+}

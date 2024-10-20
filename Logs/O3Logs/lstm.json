@@ -1,0 +1,15 @@
+{
+    "learning_rate": 0.0002,
+    "batch_size": 32,
+    "num_epochs": 100,
+    "optimizer": "Adam",
+    "optimizer_config": {
+        "learning_rate": 0.0002
+    },
+    "early_stopping": {
+        "patience": 10,
+        "monitor": "val_loss",
+        "mode": "min",
+        "restore_best_weights": true
+    }
+}

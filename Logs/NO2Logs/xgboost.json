@@ -1,0 +1,12 @@
+{
+    "best_params": {
+        "estimator__learning_rate": "0.01",
+        "estimator__max_depth": "3",
+        "estimator__n_estimators": "500"
+    },
+    "best_score": -0.0321954715804064,
+    "rmse": 0.14083534762562785,
+    "r2": 0.5124304244148324,
+    "mae": 0.10783023524487116,
+    "training_time": 274.3199152946472
+}
