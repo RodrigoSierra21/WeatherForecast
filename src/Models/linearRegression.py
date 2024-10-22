@@ -76,14 +76,16 @@ class BaselineLinearRegression(Model):
         X, y = self.create_lags(df, target_column)
         X_train, X_val, X_test = self.create_splits(X, 0.7, 0.85)
         y_train, y_val, y_test = self.create_splits(y, 0.7, 0.85)
+        self.plot_split(df[target_column])
         model = self.fit_model(X_train, y_train, X_val, y_val, target_column)
         y_predictions = self.test_model(model, X_test)
         self.print_evaluation_metrics(y_predictions, y_test, target_column)
         self.plot_predictions(y_predictions, y_test, target_column, "Linear Regression")
 
-        return model
 
-
-df = pd.read_csv("./Datasets/Processed/NO2_features.csv", index_col=0)
-lreg = BaselineLinearRegression()
-model = lreg.train_model(df, "NO2")
+# dfO3 = pd.read_csv("./Datasets/Processed/O3_features.csv", index_col=0)
+# modelO3 = BaselineLinearRegression()
+# modelO3 = XGBoost()
+# modelO3 = RandomForest()
+# modelO3 = Lstm()
+# modelO3.train_model(dfO3, "O3")

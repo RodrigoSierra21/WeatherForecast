@@ -49,8 +49,10 @@ class Model(ABC):
 
         return train, validation, test
 
-    def save_model(self, model):
-        with open("./src/models/savedModels", "wb") as f:
+    def save_model(self, model, target_column):
+        with open(
+            f"./src/Deployment/ChampionModels/model{target_column}.pkl", "wb"
+        ) as f:
             pickle.dump(model, f)
 
     def load_model(self, file_path):
@@ -141,6 +143,44 @@ class Model(ABC):
         plt.subplots_adjust(hspace=0.4)  # Increase space between subplots
 
         # Show the plots
+        plt.show()
+
+    def plot_split(self, data):
+        training_size = int(len(data) * 0.7)  # 70% for training
+        validation_size = int(len(data) * 0.15)  # 15% for validation
+
+        # Plot the data splits with different colors and labels
+        plt.figure(figsize=(10, 6))
+
+        # Plot training data in blue
+        plt.plot(data[:training_size], color="blue", label="Training Data")
+
+        # Plot validation data in orange
+        plt.plot(
+            range(training_size, training_size + validation_size),
+            data[training_size : training_size + validation_size],
+            color="orange",
+            label="Validation Data",
+        )
+
+        # Plot test data in green
+        plt.plot(
+            range(training_size + validation_size, len(data)),
+            data[training_size + validation_size :],
+            color="green",
+            label="Test Data",
+        )
+
+        # Add title and labels
+        plt.title("Training, Validation, and Test Data Splits")
+        plt.xlabel("Time Steps")
+        plt.ylabel("Data Values")
+
+        # Add a legend to distinguish the splits
+        plt.legend()
+
+        # Display the plot
+        plt.grid(True)
         plt.show()
 
     @abstractmethod
