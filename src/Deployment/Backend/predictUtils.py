@@ -1,4 +1,5 @@
 import json
+import pickle
 import pandas as pd
 import sqlite3
 
@@ -36,14 +37,15 @@ def get_rows(num_rows):
     return df
 
 
-def scale_datapoint(arr, min_max_values, feature):
+def descale_datapoint(arr, min_max_values, feature):
 
+    arr = arr.flatten()
     df = pd.DataFrame(arr, columns=[feature])
 
     min = min_max_values[feature]["min"]
     max = min_max_values[feature]["max"]
 
-    df[feature] = (df[feature] - min) / (max - min)
+    df[feature] = df[feature] * (max - min) + min
 
     return df
 
@@ -55,12 +57,10 @@ def load_json_file():
 
 
 def load_champion_model(model_path):
-    # Load the model from the specified path
-    model = None
     try:
-        model = model.load_model(model_path)
-        print(f"Model loaded successfully from {model_path}")
+        with open(model_path, "rb") as file:
+            model = pickle.load(file)
+        return model
     except Exception as e:
         print(f"Failed to load model from {model_path}: {e}")
-
-    return model
+        return None

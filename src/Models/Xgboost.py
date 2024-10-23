@@ -88,6 +88,6 @@ class XGBoost(Model):
         self.save_model(model, target_column)
 
 
-df = pd.read_csv("./Datasets/Processed/NO2_features.csv", index_col=0)
+df = pd.read_csv("./Datasets/Processed/O3_features.csv", index_col=0)
 rf = XGBoost()
-model = rf.train_model(df, "NO2")
+model = rf.train_model(df, "O3")
