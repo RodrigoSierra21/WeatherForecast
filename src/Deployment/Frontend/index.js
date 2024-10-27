@@ -72,14 +72,14 @@ function createPlot(data, thresholds, column) {
 
 // Create O3div
 var O3div = $('<div id = "O3div" ></div>');
-const O3thresholds = [100,180,300];
+const O3thresholds = [100,200,200];
 var O3Title = $('<div id = "O3title" ></div>');
 O3Title.text('Ozone (O3) Predictions');
 O3div.append(O3Title);
 
 // Create NO2div
 var NO2div = $('<div id = "NO2div" ></div>');
-const NO2thresholds = [40,200,240];
+const NO2thresholds = [25,200,200]
 var NO2Title = $('<div id = "NO2title" ></div>');
 NO2Title.text('Nitrogen dioxide (NO2) Predictions');
 NO2div.append(NO2Title);
@@ -93,8 +93,8 @@ var legendO3 = $('<div class="legend" id="O3Legend"></div>'); // Added quotes ar
 O3div.append(legendO3); // Append legendO3 to O3div
 
 const legendItemsO3 = [
-    { color: 'red', label: 'High Concentrations (Above 180 u/mg3)' },
-    { color: 'orange', label: 'Medium Concentrations (Between 100 and 180 u/mg3)' },
+    { color: 'red', label: 'High Concentrations (Above 200 u/mg3)' },
+    { color: 'orange', label: 'Medium Concentrations (Between 100 and 200 u/mg3)' },
     { color: 'green', label: 'Low Concentrations (Below 100 u/mg3)' }
 ];
 
@@ -122,8 +122,8 @@ NO2div.append(legendNO2); // Append legendO3 to O3div
 
 const legendItemsNO2 = [
     { color: 'red', label: 'High Concentrations (Above 200 u/mg3)' },
-    { color: 'orange', label: 'Medium Concentrations (Between 40 and 200 u/mg3)' },
-    { color: 'green', label: 'Low Concentrations (Below 40 u/mg3)' }
+    { color: 'orange', label: 'Medium Concentrations (Between 25 and 200 u/mg3)' },
+    { color: 'green', label: 'Low Concentrations (Below 25 u/mg3)' }
 ];
 
 // Iterate through legend items and append to the legend
@@ -171,7 +171,7 @@ requestData(targetColumnO3).then(response => {
     createPlot(valuesToPlot, O3thresholds, targetColumnO3);
     console.log(valuesToPlot)
 }).catch(error => {
-    // Handle error
+    // Handle error   
     console.log(error)
 });
 

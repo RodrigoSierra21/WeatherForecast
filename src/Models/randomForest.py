@@ -85,8 +85,10 @@ class RandomForest(Model):
         y_train, y_val, y_test = self.create_splits(y, 0.7, 0.85)
         model = self.fit_model(X_train, y_train, X_val, y_val, target_column)
         y_predictions = self.test_model(model, X_test)
-        self.print_evaluation_metrics(y_predictions, y_test, target_column)
-        self.plot_predictions(y_predictions, y_test, target_column, "Random Forest")
+
+        # Uncomment to print evaluation metrics and plots
+        # self.print_evaluation_metrics(y_predictions, y_test, target_column)
+        # self.plot_predictions(y_predictions, y_test, target_column, "Random Forest")
 
         return model
 
