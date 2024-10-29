@@ -16,12 +16,14 @@ from sklearn.metrics import (
 class Model(ABC):
 
     def create_lags(sef, df, target_column):
+        # Make sure there is no NA values
         df = df.dropna()
         data = df.values
-        n_steps = 5
-        n_forecast = 3
+        n_steps = 5  # number of steps to the past
+        n_forecast = 3  # number of steps to the future
         X, Y = [], []
 
+        # Loop through the data to create the matrices
         for i in range(len(data) - n_steps - n_forecast + 1):
             X.append(data[i : i + n_steps].flatten())
             Y.append(
@@ -31,8 +33,8 @@ class Model(ABC):
                 ]
             )
 
-        X = np.array(X)
-        Y = np.array(Y)
+        X = np.array(X)  # (num_datapoints, num_features, num_days_to_the_past)
+        Y = np.array(Y)  # (num_datapoints, num_days_to_the_future)
 
         return X, Y
 

@@ -46,3 +46,6 @@ def new_datapoint_processing_pipeline():
     new_datapoint = create_seasonal_features(new_datapoint)
 
     add_datapoint(new_datapoint)
+
+
+new_datapoint_processing_pipeline()

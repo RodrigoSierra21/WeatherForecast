@@ -10,12 +10,14 @@ from sklearn.multioutput import MultiOutputRegressor
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 
 
+# Log training statistics
 def save_training_stats(training_stats, target_variable):
     """Save training statistics to a JSON file."""
     with open(f"./Logs/FeatureImportanceLogs/{target_variable}training.json", "w") as f:
         json.dump(training_stats, f, indent=4)
 
 
+# Create the target variable
 def create_lags(df, target_column):
     data = df.values
     n_steps = 5
@@ -35,6 +37,7 @@ def create_lags(df, target_column):
     return Y
 
 
+# Create the data splits for training testing and validation
 def create_splits(data, train_percentage=0.7, validation_percentage=0.85):
     train_size = int(len(data) * train_percentage)
     validation_size = int(len(data) * validation_percentage)
@@ -48,6 +51,7 @@ def create_splits(data, train_percentage=0.7, validation_percentage=0.85):
     return train, validation, test
 
 
+# Hyperparameter grid for gridsearch
 def create_grid_params():
     grid_params = {
         "estimator__n_estimators": [150, 300],
@@ -67,6 +71,8 @@ def create_grid_params():
     return grid_params
 
 
+# Create teh random forest model
+# Wrap it with multioutput to predict multiple days
 def create_model():
     model = RandomForestRegressor(random_state=42)
     model = MultiOutputRegressor(model)
@@ -74,6 +80,7 @@ def create_model():
     return model
 
 
+# train the model and log statistics
 def fit_model(X_train, y_train, X_val, y_val, target_variable):
     X_train = np.concatenate([X_train, X_val], axis=0)
     y_train = np.concatenate([y_train, y_val], axis=0)
@@ -128,6 +135,7 @@ def fit_model(X_train, y_train, X_val, y_val, target_variable):
     return best_model
 
 
+# Compute the feature importances
 def compute_importances(model, feature_names):
     importances = np.mean(
         [est.feature_importances_ for est in model.estimators_], axis=0
@@ -157,6 +165,7 @@ def plot_feature_importances(df, target_column, threshold):
     plt.show()
 
 
+# Drop non important features (all below the threshold)
 def drop_features(importances, threshold):
     retained_features_df = importances[importances["Importance"] >= threshold]
 

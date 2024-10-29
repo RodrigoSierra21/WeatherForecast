@@ -13,9 +13,10 @@ shutil.copyfile(source_db, target_db)
 conn_target = sqlite3.connect(target_db)
 cursor_target = conn_target.cursor()
 
+# Create a database with the last month of data for the deployment folder
 delete_query = "DELETE FROM [Air Pollution Data] WHERE DateTime < ?"
 cursor_target.execute(delete_query, (delete_date,))
 
-# Step 4: Commit the changes and close the connection
+# Commit the changes and close the connection
 conn_target.commit()
 conn_target.close()

@@ -1,7 +1,11 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+# Set the plot style
+sns.set_style("whitegrid")
 
+
+# Plot correlation matrix
 def plot_correlation_matrix(df):
     correlation_matrix = df.corr()
 
@@ -9,10 +13,6 @@ def plot_correlation_matrix(df):
     sns.heatmap(correlation_matrix, annot=True, cmap="coolwarm", linewidths=0.5)
     plt.title("Correlation Matrix of All Features")
     plt.show()
-
-
-# Set the plot style
-sns.set_style("whitegrid")
 
 
 def boxplot_yearly_variation(df):

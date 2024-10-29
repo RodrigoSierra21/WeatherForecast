@@ -62,6 +62,7 @@ def scale_data(df):
     return scaled_df
 
 
+# Gets the mean and std values of all the features in the dataset
 def get_mean_values(df):
     mean_std = {
         feature: {"mean": df[feature].mean(), "std": df[feature].std()}
@@ -71,6 +72,7 @@ def get_mean_values(df):
     return mean_std
 
 
+# Gets the max and min vlaues for all the features in the dataset
 def get_min_max_values(df):
     min_max = {
         feature: {"min": df[feature].min(), "max": df[feature].max()}
@@ -80,6 +82,7 @@ def get_min_max_values(df):
     return min_max
 
 
+# Puts all the gathered values in a dictionary in a json file for further use
 def store_values(min_max, mean_std, features):
     values_to_store = {
         "mean_std": mean_std,

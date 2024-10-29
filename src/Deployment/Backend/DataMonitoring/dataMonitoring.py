@@ -29,11 +29,8 @@ def data_monitoring_pipeline():
 
             shifts[feature] = bool(wilcox_test(values, value))
 
-        # add_all(week_of_year, year, values_to_add, features)
+        add_all(week_of_year, year, values_to_add, features)
         store_shifts(shifts)
-
-    else:
-        print("also working")
 
 
 data_monitoring_pipeline()

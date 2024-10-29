@@ -2,7 +2,7 @@ import uvicorn
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 
-from predictNewData import predict_data
+from DataPrediction.predictNewData import predict_data
 
 app = FastAPI()
 

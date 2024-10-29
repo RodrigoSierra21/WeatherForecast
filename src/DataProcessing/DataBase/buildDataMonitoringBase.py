@@ -3,6 +3,7 @@ import pandas as pd
 
 
 def get_data():
+    # Connect with teh database
     conn = sqlite3.connect("./Datasets/Databases/pollutionDataBase.db")
 
     table_name = "Air Pollution Data"
@@ -19,16 +20,23 @@ def get_data():
         "year",
         "week_of_year",
     ]
+
+    # Select only the features used for model training
     df = pd.read_sql(f"SELECT {', ' .join(columns)} FROM [{table_name}]", conn)
 
+    # Close the connection
     conn.close()
 
     return df
 
 
 def create_database():
+
+    # Create teh database for data distribution shifts
     with sqlite3.connect("./src/Deployment/Data/Databases/dataMonitoring.db") as conn:
         cursor = conn.cursor()
+
+        # Set the week of the year, year and feature to primary keys for easier access
         cursor.execute(
             """
             CREATE TABLE IF NOT EXISTS data_monitoring (
