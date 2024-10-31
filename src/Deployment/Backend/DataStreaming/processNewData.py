@@ -1,8 +1,8 @@
 import pandas as pd
 
-from DataProcessing.API.getMeteorological import get_daily_meteorological
-from DataProcessing.API.getPollutans import get_daily_pollutans
-from DataProcessing.dataProcessingUtil import (
+from DataStreaming.API.getMeteorological import get_daily_meteorological
+from DataStreaming.API.getPollutans import get_daily_pollutans
+from DataStreaming.dataProcessingUtil import (
     load_data_information,
     handle_missing_data,
     clip_outliers,

@@ -3,7 +3,7 @@ import pandas as pd
 
 from datetime import datetime, timedelta
 
-from DataProcessing.processNewData import new_datapoint_processing_pipeline
+from DataStreaming.processNewData import new_datapoint_processing_pipeline
 from DataMonitoring.dataMonitoring import data_monitoring_pipeline
 from DataPrediction.predictNewData import predict_data
 from DataPrediction.performanceMonitoring import monitor_metrics
@@ -38,9 +38,3 @@ def predict_for_NO2():
     predict_data("NO2")
     metrics = monitor_metrics("NO2", target_day3)
     print(metrics)
-
-
-# fetch_data()
-# predict_for_O3()
-# predict_for_NO2()
-show_dataDistribution_status()
