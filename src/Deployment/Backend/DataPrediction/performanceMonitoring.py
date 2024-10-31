@@ -139,6 +139,9 @@ def monitor_metrics(target_column, target_date3):
         target_column, target_date3, past_days[1], past_days[0]
     )
 
+    print(ground_truths)
+    print(predictions)
+
     # De scale ground truth values
     feature_info = load_json_file()
     min_max_values = feature_info.get("min_max", {})

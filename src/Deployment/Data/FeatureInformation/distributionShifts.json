@@ -1,11 +1,11 @@
 {
-    "NO2": true,
+    "NO2": false,
     "O3": false,
     "PM10": false,
     "PM2.5": true,
     "prcp": false,
     "pres": true,
-    "tavg": false,
-    "wdir": false,
+    "tavg": true,
+    "wdir": true,
     "wspd": true
 }

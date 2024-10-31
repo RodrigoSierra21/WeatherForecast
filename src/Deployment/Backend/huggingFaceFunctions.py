@@ -13,11 +13,6 @@ from DataPrediction.predictNewData import predict_data
 from DataPrediction.performanceMonitoring import monitor_metrics
 
 
-def fetch_data():
-    new_datapoint_processing_pipeline()
-    return data_monitoring_pipeline()
-
-
 def show_dataDistribution_status():
     with open(
         "./src/Deployment/Data/FeatureInformation/distributionShifts.json", "r"
@@ -44,3 +39,10 @@ def predict_for_NO2():
     metrics = monitor_metrics("NO2", target_day3)
 
     return predictions, metrics
+
+
+new_datapoint_processing_pipeline()
+alters = data_monitoring_pipeline()
+df = show_dataDistribution_status()
+pred, met = predict_for_NO2()
+pr, me = predict_for_O3()
