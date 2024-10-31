@@ -18,8 +18,8 @@ def get_daily_pollutans():
         "latitude": 52.52,
         "longitude": 13.41,
         "hourly": ["pm10", "pm2_5", "nitrogen_dioxide", "ozone"],
-        "start_date": yesterday,
-        "end_date": yesterday,
+        "start_date": "2024-10-28",
+        "end_date": "2024-10-30",
     }
     responses = openmeteo.weather_api(url, params=params)
 

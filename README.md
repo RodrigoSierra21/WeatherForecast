@@ -61,7 +61,7 @@ Model Training
     1.- Go to src/Models.
     2.- Open modelRunner.
     3.- Uncommnet the model you want to run
-    4.- UNcomment the target pollutant oyu want to train the mdoel for
+    4.- UNcomment the target pollutant you want to train the mdoel for
         run: src/Models/modelRunnner.py
     5.- Optional: Go to src/Models/ModelsClasses, go to the script of the model you want train and
     uncomment the lines for generating visualizations to display graphs during training.
@@ -72,10 +72,5 @@ Data Streaming and Monitoring
     1.- Navigate to src/Deployment/Backend.
         run: huggingFaceFunctions.py to automatically execute the entire workflow:
 
-## Example Usage
-
-1.- Example to train a LinearRegression for O3
-target_column = "O3" # target_column = "NO2" # model = XGBoost() # model = Lstm() # model = RandomForest()
-model = BaselineLinearRegression()
-df = model.load_data(target_column)
-model.train_model(df, target_column)
+The hugging face repoditory can eb found in: https://huggingface.co/spaces/RaghavTiwari/AirPollution
+password : admin

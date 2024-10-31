@@ -1,5 +1,6 @@
 import numpy as np
 
+from DataPrediction.performanceMonitoring import add_metrics_data
 from DataPrediction.predictUtils import (
     load_features,
     get_rows,
@@ -7,8 +8,6 @@ from DataPrediction.predictUtils import (
     load_json_file,
     load_champion_model,
 )
-
-from DataPrediction.performanceMonitoring import add_metrics_data
 
 
 def predict_data(target_column):
@@ -49,7 +48,7 @@ def predict_data(target_column):
     predictions = predictions.flatten()
 
     # Add predictions to performance monitoring database
-    # add_metrics_data(last_day, predictions, target_column)
+    add_metrics_data(last_day, predictions, target_column)
 
     values = np.concatenate([last_target_values, predictions])
 

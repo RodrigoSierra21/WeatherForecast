@@ -1,0 +1,18 @@
+pandas
+numpy
+scikit-learn
+meteostat
+datetime
+openmeteo-requests
+requests-cache
+retry-requests
+uvicorn
+fastapi
+fastapi[all]
+jsonpickle
+matplotlib
+xgboost
+tensorflow
+
+# Standard libraries not included in requirements.txt
+# sqlite3, shutil, json, time, pickle, ABC, seaborn are part of the Python Standard Library or do not have separate installation

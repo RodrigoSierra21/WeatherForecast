@@ -1,5 +1,3 @@
-import numpy as np
-
 from DataMonitoring.dataMonitoringUtils import (
     check_equal_values,
     plot_histogram,
@@ -24,6 +22,7 @@ def data_monitoring_pipeline():
         week_of_year = last_week_data["week_of_year"].iloc[0]
         year = last_week_data["year"].iloc[0]
         values_to_add = []
+        alerts = []
         shifts = {}
         features = get_features()
         for feature in features:
@@ -37,9 +36,10 @@ def data_monitoring_pipeline():
 
             # There has been a data distribution shift
             if flag:
-                alert_data_distribution_shift(feature)
+                alerts.extend(alert_data_distribution_shift(feature))
 
             shifts[feature] = flag
 
         add_all(week_of_year, year, values_to_add, features)
         store_shifts(shifts)
+        return alerts

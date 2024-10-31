@@ -35,24 +35,42 @@ def add_metrics_data(prediction_date, predictions, target_column):
     ) as conn:
         cursor = conn.cursor()
 
-        query = f"""
-            INSERT INTO {target_column}_prediction_log (prediction_date, target_date1, target_date2, target_date3, predicted_day1, predicted_day2, predicted_day3)
-            VALUES (?,?,?,?,?,?,?)
+        # Only insert the data once.
+        # Check if the prediction_date already exists in the prediction_date column
+        check_query = f"""
+            SELECT 1 
+            FROM {target_column}_prediction_log 
+            WHERE prediction_date = ?
         """
+        cursor.execute(check_query, (prediction_date,))
+        result = cursor.fetchone()
 
-        cursor.execute(
-            query,
-            (
-                prediction_date,
-                next_three_days[0],
-                next_three_days[1],
-                next_three_days[2],
-                predictions[0],
-                predictions[1],
-                predictions[2],
-            ),
-        )
-        conn.commit()
+        # If result is None, prediction_date is not present in the prediction_date column
+        if result is None:
+            insert_query = f"""
+                INSERT INTO {target_column}_prediction_log (
+                    prediction_date, 
+                    target_date1, target_date2, target_date3, 
+                    predicted_day1, predicted_day2, predicted_day3
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            """
+
+            cursor.execute(
+                insert_query,
+                (
+                    prediction_date,
+                    next_three_days[0],
+                    next_three_days[1],
+                    next_three_days[2],
+                    predictions[0],
+                    predictions[1],
+                    predictions[2],
+                ),
+            )
+            conn.commit()
+        else:
+            pass
 
 
 def retrieve_predictions(target_date3, target_column):
