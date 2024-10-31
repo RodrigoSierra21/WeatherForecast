@@ -1,32 +1,38 @@
 import numpy as np
-import pandas as pd
 import time
 
-from sklearn.linear_model import LinearRegression, Ridge, Lasso
-from sklearn.multioutput import MultiOutputRegressor
 from sklearn.model_selection import GridSearchCV, KFold
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.multioutput import MultiOutputRegressor
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 
+from ModelClasses.abstractClass import Model
 
-from abstractClass import Model
 
-
-class BaselineLinearRegression(Model):
-
+class RandomForest(Model):
     def create_grid_params(self):
         grid_params = {
-            "estimator": [Ridge(), Lasso()],
-            "estimator__alpha": [0.01, 0.1, 1.0, 10.0],
+            "estimator__n_estimators": [150, 300],
+            "estimator__max_depth": [15, 30],
+            "estimator__min_samples_split": [2, 5, 10],
+            "estimator__min_samples_leaf": [
+                1,
+                2,
+                4,
+            ],
+            "estimator__max_features": [
+                "sqrt",
+                "log2",
+            ],
         }
+
         return grid_params
 
     def create_model(self):
-        linear_model = LinearRegression()
+        model = RandomForestRegressor(random_state=42)
+        model = MultiOutputRegressor(model)
 
-        # MultiOutputRegressor allows fitting multiple target variables
-        multi_output_model = MultiOutputRegressor(linear_model)
-
-        return multi_output_model
+        return model
 
     def fit_model(self, X_train, y_train, X_val, y_val, target_variable):
         X_train = np.concatenate([X_train, X_val], axis=0)
@@ -68,7 +74,7 @@ class BaselineLinearRegression(Model):
             "mae": mae,
             "training_time": training_time,
         }
-        self.save_training_stats(training_stats, target_variable, "linearRegression")
+        self.save_training_stats(training_stats, target_variable, "randomForest")
 
         return best_model
 
@@ -76,16 +82,11 @@ class BaselineLinearRegression(Model):
         X, y = self.create_lags(df, target_column)
         X_train, X_val, X_test = self.create_splits(X, 0.7, 0.85)
         y_train, y_val, y_test = self.create_splits(y, 0.7, 0.85)
-        self.plot_split(df[target_column])
         model = self.fit_model(X_train, y_train, X_val, y_val, target_column)
         y_predictions = self.test_model(model, X_test)
-        self.print_evaluation_metrics(y_predictions, y_test, target_column)
-        self.plot_predictions(y_predictions, y_test, target_column, "Linear Regression")
 
+        # Uncomment to print evaluation metrics and plots
+        # self.print_evaluation_metrics(y_predictions, y_test, target_column)
+        # self.plot_predictions(y_predictions, y_test, target_column, "Random Forest")
 
-# dfO3 = pd.read_csv("./Datasets/Processed/O3_features.csv", index_col=0)
-# modelO3 = BaselineLinearRegression()
-# modelO3 = XGBoost()
-# modelO3 = RandomForest()
-# modelO3 = Lstm()
-# modelO3.train_model(dfO3, "O3")
+        return model

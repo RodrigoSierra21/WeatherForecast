@@ -57,3 +57,17 @@ def plot_distribution_shift(data):
 
     # Show the plot
     plt.show()
+
+
+def alert_data_distribution_shift(feature):
+    with open("./src/Deployment/Data/FeatureInformation/featuresO3.json", "r") as file:
+        O3_features = json.load(file)
+
+    with open("./src/Deployment/Data/FeatureInformation/featuresNO2.json", "r") as file:
+        NO2_features = json.load(file)
+
+    if feature in NO2_features:
+        print(f"Data distribution shift in {feature}. Retatrian NO2 model.")
+
+    if feature in O3_features:
+        print(f"Data distribution shift in {feature}. Retatrian O3 model.")

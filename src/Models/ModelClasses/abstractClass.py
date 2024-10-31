@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pickle
 import json
+import pandas as pd
 
 from abc import ABC, abstractmethod
 from sklearn.metrics import (
@@ -14,6 +15,12 @@ from sklearn.metrics import (
 
 # Create an abstract class with the funcitons common to all models
 class Model(ABC):
+
+    def load_data(self, target_column):
+        if target_column == "NO2":
+            return pd.read_csv("./Datasets/Processed/NO2_features.csv", index_col=0)
+        else:
+            return pd.read_csv("./Datasets/Processed/O3_features.csv", index_col=0)
 
     def create_lags(sef, df, target_column):
         # Make sure there is no NA values

@@ -7,7 +7,8 @@ import sqlite3
 def load_features(target_column):
     try:
         with open(
-            f"./Datasets/FeatureInformation/features{target_column}.json", "r"
+            f"./src/Deployment/Data/FeatureInformation/features{target_column}.json",
+            "r",
         ) as file:
             features = json.load(file)  # Load the JSON data
             return features  # Return the loaded features
@@ -17,7 +18,7 @@ def load_features(target_column):
 
 
 def get_rows(num_rows):
-    conn = sqlite3.connect("./Datasets/DataBases/pollutionDataBase.db")
+    conn = sqlite3.connect("./src/Deployment/Data/Databases/pollutionData.db")
 
     # Create the SQL query to fetch the last n rows
     query = f"""
@@ -51,7 +52,9 @@ def descale_datapoint(arr, min_max_values, feature):
 
 
 def load_json_file():
-    with open("./Datasets/FeatureInformation/dataset_information.json", "r") as file:
+    with open(
+        "./src/Deployment/Data/FeatureInformation/dataset_information.json", "r"
+    ) as file:
         data = json.load(file)
     return data
 

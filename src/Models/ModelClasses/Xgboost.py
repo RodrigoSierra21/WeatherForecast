@@ -1,39 +1,36 @@
-import pandas as pd
 import numpy as np
 import time
+import xgboost as xgb
 
-from sklearn.model_selection import GridSearchCV, KFold
-from sklearn.ensemble import RandomForestRegressor
 from sklearn.multioutput import MultiOutputRegressor
+from sklearn.model_selection import GridSearchCV, KFold
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 
-from abstractClass import Model
+from ModelClasses.abstractClass import Model
 
 
-class RandomForest(Model):
+class XGBoost(Model):
+
     def create_grid_params(self):
         grid_params = {
-            "estimator__n_estimators": [150, 300],
-            "estimator__max_depth": [15, 30],
-            "estimator__min_samples_split": [2, 5, 10],
-            "estimator__min_samples_leaf": [
-                1,
-                2,
-                4,
-            ],
-            "estimator__max_features": [
-                "sqrt",
-                "log2",
-            ],
+            "estimator__n_estimators": [100, 500],
+            "estimator__learning_rate": [0.01, 0.05, 0.1],
+            "estimator__max_depth": [3, 6, 9],
         }
 
         return grid_params
 
     def create_model(self):
-        model = RandomForestRegressor(random_state=42)
-        model = MultiOutputRegressor(model)
+        xgboost_model = xgb.XGBRegressor(
+            base_score=0.5,
+            booster="gbtree",
+            objective="reg:squarederror",
+            random_state=42,
+        )
 
-        return model
+        multi_output_model = MultiOutputRegressor(xgboost_model)
+
+        return multi_output_model
 
     def fit_model(self, X_train, y_train, X_val, y_val, target_variable):
         X_train = np.concatenate([X_train, X_val], axis=0)
@@ -75,7 +72,7 @@ class RandomForest(Model):
             "mae": mae,
             "training_time": training_time,
         }
-        self.save_training_stats(training_stats, target_variable, "randomForest")
+        self.save_training_stats(training_stats, target_variable, "xgboost")
 
         return best_model
 
@@ -88,11 +85,5 @@ class RandomForest(Model):
 
         # Uncomment to print evaluation metrics and plots
         # self.print_evaluation_metrics(y_predictions, y_test, target_column)
-        # self.plot_predictions(y_predictions, y_test, target_column, "Random Forest")
-
-        return model
-
-
-df = pd.read_csv("./Datasets/Processed/NO2_features.csv", index_col=0)
-rf = RandomForest()
-model = rf.train_model(df, "NO2")
+        # self.plot_predictions(y_predictions, y_test, target_column, "XGBoost")
+        self.save_model(model, target_column)

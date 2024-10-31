@@ -1,5 +1,3 @@
-import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 
 from tensorflow.keras.models import Sequential
@@ -9,7 +7,7 @@ from tensorflow.keras.losses import MeanSquaredError
 from tensorflow.keras.metrics import RootMeanSquaredError
 from tensorflow.keras.optimizers import Adam
 
-from abstractClass import Model
+from ModelClasses.abstractClass import Model
 
 
 class Lstm(Model):
@@ -108,8 +106,3 @@ class Lstm(Model):
         y_predictions = self.test_model(model, X_test)
         self.print_evaluation_metrics(y_predictions, y_test, target_column)
         self.plot_predictions(y_predictions, y_test, target_column, "LSTM")
-
-
-df = pd.read_csv("./Datasets/Processed/NO2_features.csv", index_col=0)
-lstm = Lstm()
-model = lstm.train_model(df, "NO2")

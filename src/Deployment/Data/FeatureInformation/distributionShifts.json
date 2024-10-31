@@ -3,9 +3,9 @@
     "O3": false,
     "PM10": false,
     "PM2.5": true,
-    "prcp": false,
+    "prcp": true,
     "pres": true,
-    "tavg": false,
+    "tavg": true,
     "wdir": false,
-    "wspd": true
+    "wspd": false
 }

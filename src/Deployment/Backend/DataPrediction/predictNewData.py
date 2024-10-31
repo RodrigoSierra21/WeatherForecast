@@ -1,7 +1,6 @@
-import pandas as pd
 import numpy as np
 
-from predictUtils import (
+from DataPrediction.predictUtils import (
     load_features,
     get_rows,
     descale_datapoint,
@@ -9,11 +8,16 @@ from predictUtils import (
     load_champion_model,
 )
 
+from DataPrediction.performanceMonitoring import add_metrics_data
+
 
 def predict_data(target_column):
 
     # Retrieve the last five days
     last_datapoint = get_rows(5)
+
+    # Get the last day before predictions
+    last_day = last_datapoint["DateTime"].iloc[0]
 
     # De scale predictions
     feature_info = load_json_file()
@@ -25,7 +29,7 @@ def predict_data(target_column):
 
     # Load model for O3
     model = load_champion_model(
-        f"C:\\Users\\34618\\OneDrive\\Documentos\\UNI\\ML4Industry\\Group14-ML4Industry\\ForecastingProject\\src\\Deployment\\Backend\\ChampionModels\\model{target_column}.pkl"
+        f"./src/Deployment/Data/ChampionModels/model{target_column}.pkl"
     )
 
     datapoint = df.to_numpy().reshape(5, len(features))
@@ -43,6 +47,10 @@ def predict_data(target_column):
     # Get the first three predictions
     predictions = predictions.values
     predictions = predictions.flatten()
+
+    # Add predictions to performance monitoring database
+    # add_metrics_data(last_day, predictions, target_column)
+
     values = np.concatenate([last_target_values, predictions])
 
     return values

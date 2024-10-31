@@ -1,13 +1,19 @@
 import numpy as np
 
-from dataMonitoringUtils import (
+from DataMonitoring.dataMonitoringUtils import (
     check_equal_values,
     plot_histogram,
     wilcox_test,
     store_shifts,
+    alert_data_distribution_shift,
 )
 
-from sqlUtils import get_last_week, get_feature_data, get_features, add_all
+from DataMonitoring.sqlUtils import (
+    get_last_week,
+    get_feature_data,
+    get_features,
+    add_all,
+)
 
 
 def data_monitoring_pipeline():
@@ -27,10 +33,13 @@ def data_monitoring_pipeline():
             # Determine if the data is normally distributed
             # plot_histogram(rows)
 
-            shifts[feature] = bool(wilcox_test(values, value))
+            flag = bool(wilcox_test(values, value))
+
+            # There has been a data distribution shift
+            if flag:
+                alert_data_distribution_shift(feature)
+
+            shifts[feature] = flag
 
         add_all(week_of_year, year, values_to_add, features)
         store_shifts(shifts)
-
-
-data_monitoring_pipeline()

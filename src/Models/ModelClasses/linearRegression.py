@@ -1,35 +1,30 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
 import time
-import xgboost as xgb
 
+from sklearn.linear_model import LinearRegression, Ridge, Lasso
 from sklearn.multioutput import MultiOutputRegressor
 from sklearn.model_selection import GridSearchCV, KFold
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 
-from abstractClass import Model
+
+from ModelClasses.abstractClass import Model
 
 
-class XGBoost(Model):
+class BaselineLinearRegression(Model):
 
     def create_grid_params(self):
         grid_params = {
-            "estimator__n_estimators": [100, 500],
-            "estimator__learning_rate": [0.01, 0.05, 0.1],
-            "estimator__max_depth": [3, 6, 9],
+            "estimator": [Ridge(), Lasso()],
+            "estimator__alpha": [0.01, 0.1, 1.0, 10.0],
         }
-
         return grid_params
 
     def create_model(self):
-        xgboost_model = xgb.XGBRegressor(
-            base_score=0.5,
-            booster="gbtree",
-            objective="reg:squarederror",
-            random_state=42,
-        )
+        linear_model = LinearRegression()
 
-        multi_output_model = MultiOutputRegressor(xgboost_model)
+        # MultiOutputRegressor allows fitting multiple target variables
+        multi_output_model = MultiOutputRegressor(linear_model)
 
         return multi_output_model
 
@@ -73,7 +68,7 @@ class XGBoost(Model):
             "mae": mae,
             "training_time": training_time,
         }
-        self.save_training_stats(training_stats, target_variable, "xgboost")
+        self.save_training_stats(training_stats, target_variable, "linearRegression")
 
         return best_model
 
@@ -81,15 +76,8 @@ class XGBoost(Model):
         X, y = self.create_lags(df, target_column)
         X_train, X_val, X_test = self.create_splits(X, 0.7, 0.85)
         y_train, y_val, y_test = self.create_splits(y, 0.7, 0.85)
+        self.plot_split(df[target_column])
         model = self.fit_model(X_train, y_train, X_val, y_val, target_column)
         y_predictions = self.test_model(model, X_test)
-
-        # Uncomment to print evaluation metrics and plots
-        # self.print_evaluation_metrics(y_predictions, y_test, target_column)
-        # self.plot_predictions(y_predictions, y_test, target_column, "XGBoost")
-        self.save_model(model, target_column)
-
-
-df = pd.read_csv("./Datasets/Processed/O3_features.csv", index_col=0)
-rf = XGBoost()
-model = rf.train_model(df, "O3")
+        self.print_evaluation_metrics(y_predictions, y_test, target_column)
+        self.plot_predictions(y_predictions, y_test, target_column, "Linear Regression")
