@@ -41,8 +41,8 @@ def predict_for_NO2():
     return predictions, metrics
 
 
-new_datapoint_processing_pipeline()
-alters = data_monitoring_pipeline()
-df = show_dataDistribution_status()
+# new_datapoint_processing_pipeline()
+# alters = data_monitoring_pipeline()
+# df = show_dataDistribution_status()
 pred, met = predict_for_NO2()
 pr, me = predict_for_O3()
